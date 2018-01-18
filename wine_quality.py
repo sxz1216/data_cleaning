@@ -73,6 +73,38 @@ plt.suptitle('Histograms and Scatter Plots of Quality,Alcohol,and Residual Sugar
 verticalalignment='top',x=0.5,y=0.999)
 plt.show()
 
+#类似于R语言的定义公式，~左边是因变量，右边是自变量
+my_formula = 'quality ~ alcohol + chlorides + citric_acid + density + fixed_acidity + free_sulfur_dioxide + pH\
++ residual_sugar + sulphates + total_sulfur_dioxide + volatile_acidity'
+
+#拟合一个普通最小二乘回归模型
+lm = ols(my_formula,data=wine).fit()
+
+#广义线性模型进行线性回归
+lm_1 = glm(my_formula,data=wine,family=sm.families.Gaussian()).fit()
+
+#呈现结果
+print(lm.summary())
+print('\nQuantities you can extract from the result:\n%s' % dir(lm))
+print('\nCoefficients:\n%s' % lm.params)
+print('\nCoefficient Std Errors:\n%s' % lm.bse)
+print('\nAdj. R-squared:\n%.2f' % lm.rsquared_adj)
+print('\nF-statistic: %.1f P-value :%.2f' % (lm.fvalue,lm.f_pvalue))
+print('\nNumber of obs: %d  Number of fitted values : %d' % (lm.nobs,len(lm.fittedvalues)))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
