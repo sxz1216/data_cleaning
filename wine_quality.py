@@ -106,6 +106,13 @@ lm_standardized = ols(my_formula,data=wine_standardized).fit()
 print(lm_standardized.summary())
 
 
+#预测
+new_obervations = wine.ix[wine.index.isin(range(10)),independent_variables.columns]
+
+y_predicted = lm.predict(new_obervations)
+for i in y_predicted:
+	print('%.2f' % i)
+
 
 
 
