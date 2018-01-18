@@ -51,7 +51,27 @@ print(wine.groupby('type')[['quality']].agg(['std']))
 tstat,pvalue,df = sm.stats.ttest_ind(red_wine,white_wine)
 print('tstat: %.3f pvalue: %.4f' % (tstat,pvalue))
 
+#计算左右变量的相关矩阵
+print(wine.corr())
 
+#从红葡萄酒和白葡萄酒中取出较小的样本进行绘图
+def take_sample(data_frame,replace=False,n=200):
+	return data_frame.loc[np.random.choice(data_frame.index,replace=replace,size=n)]
+
+reds_sample = take_sample(wine.loc[wine['type']=='red',:])
+whites_sample = take_sample(wine.loc[wine['type']=='white',:])
+wine_sample = pd.concat([reds_sample,whites_sample])
+#创建新列，并根据是否在原数据框中设为1和0
+wine['in_sample'] = np.where(wine.index.isin(wine_sample.index),1.,0.)
+print(pd.crosstab(wine.in_sample,wine.type,margins=True))
+
+#查看成对变量之间的关系
+g = sns.pairplot(wine_sample,kind='reg',plot_kws={'ci':False,'x_jitter':0.25,'y_jitter':0.25},hue='type',diag_kind='hist',\
+diag_kws={'bins':10,'alpha':1.0},palette=dict(red='red',white='white'),markers=['o','s'],vars=['quality','alcohol','residual_sugar'])
+print(g)
+plt.suptitle('Histograms and Scatter Plots of Quality,Alcohol,and Residual Sugar',fontsize=14,horizontalalignment='center',\
+verticalalignment='top',x=0.5,y=0.999)
+plt.show()
 
 
 
